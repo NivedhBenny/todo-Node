@@ -56,7 +56,7 @@ app.get("/",async function(req, res) {
   const result = await Todo.find();
   //items = [];
   //result.forEach(todo=>items.push(todo.name));
-  res.render("list", {listTitle: "Today", newListItems: result});
+  res.render("list.ejs", {listTitle: "Today", newListItems: result});
 
 });
 
@@ -110,7 +110,7 @@ app.get("/:customListName",async function(req,res){
       res.redirect("/"+customListName);
     }else{
       //console.log(result.items);
-      res.render("list", {listTitle: `${customListName}`, newListItems: result.items});
+      res.render("list.ejs", {listTitle: `${customListName}`, newListItems: result.items});
     }
     
 })
