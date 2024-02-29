@@ -16,49 +16,71 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 mongoose.connect(process.env.MONGODB_CONNECT_URI);
-var items = [];
-var workItems = [];
+var hrsTime = [];
+var minsTime = [];
+var hrsTotal=0;
+var minTotal=0;
 
 const todoSchema = new mongoose.Schema({
   name:String,
-  type:String
+  type:String,
+  hrs:Number,
+  mins:Number
 });
 
 const Todo = mongoose.model("Todo",todoSchema);
 
-const item1 = new Todo({
-  name: "Welcome to your todolist!",
-  type:"chore"
+function calculateTime(){
+  hrsTotal = hrsTime.reduce((partialSum, a) => partialSum + a, 0);
+  minTotal = minsTime.reduce((partialSum, a) => partialSum + a, 0);
+  hrsTotal += Math.floor(minTotal / 60);
+  minTotal%=60;
+  //console.log(hrsTotal," ",minTotal);
+}
+// const item1 = new Todo({
+//   name: "Welcome to your todolist!",
+//   type:"chore"
+// });
+
+// const item2 = new Todo({
+//   name: "Hit the + button to add a new item.",
+//   type:"chore"
+// });
+
+// const item3 = new Todo({
+//   name: "<-- Hit this to delete an item.",
+//   type:"chore"
+// });
+
+// const defaultItems = [item1, item2, item3];
+
+// const listSchema = new mongoose.Schema({
+//   name:String,
+//   items: [todoSchema]
+// });
+
+//const List = mongoose.model("List",listSchema);
+
+app.get("/", async function(req, res) {
+  try {
+    const result = await Todo.find();
+    hrsTime = [];
+    minsTime = [];
+    result.forEach(todo => hrsTime.push(todo.hrs));
+    result.forEach(todo => minsTime.push(todo.mins));
+    calculateTime();
+    res.render("list.ejs", {
+      listTitle: "Today",
+      newListItems: result,
+      totalHrs: hrsTotal,
+      totalMins: minTotal
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
-const item2 = new Todo({
-  name: "Hit the + button to add a new item.",
-  type:"chore"
-});
-
-const item3 = new Todo({
-  name: "<-- Hit this to delete an item.",
-  type:"chore"
-});
-
-const defaultItems = [item1, item2, item3];
-
-const listSchema = new mongoose.Schema({
-  name:String,
-  items: [todoSchema]
-});
-
-const List = mongoose.model("List",listSchema);
-
-app.get("/",async function(req, res) {
-
-//const day = date.getDate();
-  const result = await Todo.find();
-  //items = [];
-  //result.forEach(todo=>items.push(todo.name));
-  res.render("list.ejs", {listTitle: "Today", newListItems: result});
-
-});
 
 app.post("/",async function(req, res){
 
@@ -68,7 +90,9 @@ app.post("/",async function(req, res){
   //console.log(item)
   const todo = new Todo({
     name:req.body.newItem,
-    type:req.body.list
+    type:req.body.list,
+    hrs:req.body.hours,
+    mins:req.body.mins
   });
 
   if (req.body.list === "Today") {
@@ -98,26 +122,26 @@ app.post("/delete",async function(req,res){
 // app.get("/work", function(req,res){
 //   res.render("list", {listTitle: "Work List", newListItems: workItems});
 // });
-app.get("/:customListName",async function(req,res){
-  const customListName=_.capitalize(req.params.customListName);
-    const result = await List.findOne({name:customListName});
-    if(!result){
-      const list = new List ({
-        name:customListName,
-        items: defaultItems
-      });
-      list.save();
-      res.redirect("/"+customListName);
-    }else{
-      //console.log(result.items);
-      res.render("list.ejs", {listTitle: `${customListName}`, newListItems: result.items});
-    }
+// app.get("/:customListName",async function(req,res){
+//   const customListName=_.capitalize(req.params.customListName);
+//     const result = await List.findOne({name:customListName});
+//     if(!result){
+//       const list = new List ({
+//         name:customListName,
+//         items: defaultItems
+//       });
+//       list.save();
+//       res.redirect("/"+customListName);
+//     }else{
+//       //console.log(result.items);
+//       res.render("list.ejs", {listTitle: `${customListName}`, newListItems: result.items});
+//     }
     
-})
+// })
 
-app.get("/about", function(req, res){
-  res.render("about");
-});
+// app.get("/about", function(req, res){
+//   res.render("about");
+// });
 
 app.listen(port, function() {
   console.log(`Server started on port ${port}`);
