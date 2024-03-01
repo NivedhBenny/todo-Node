@@ -1,6 +1,6 @@
 html {
   background-color: #E4E9FD;
-  background-image: -webkit-linear-gradient(65deg, #A683E3 50%, #E4E9FD 50%);
+  background-image: -webkit-linear-gradient(65deg, #9DBC98 50%, #F9EFDB 50%);
   
 
 
@@ -18,20 +18,20 @@ p{
   border-radius: 0 0 10px 10px;
 }
 .show p {
-  background-color: #A683E3;
+  background-color: #638889;
   color: white;
 }
 .box {
   /* max-width: 400px; */
   margin: 50px auto;
-  background: white;
+  background: whitesmoke;
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   width: fit-content;
 }
 
 #heading {
-  background-color: #A683E3;
+  background-color: #638889;
   text-align: center;
 }
 
@@ -74,7 +74,7 @@ button {
   width: 50px;
   border-radius: 50%;
   border-color: transparent;
-  background-color: #A683E3;
+  background-color: #88AB8E;
   color: #fff;
   font-size: 30px;
   padding-bottom: 6px;

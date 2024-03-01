@@ -91,8 +91,8 @@ app.post("/",async function(req, res){
   const todo = new Todo({
     name:req.body.newItem,
     type:req.body.list,
-    hrs:req.body.hours,
-    mins:req.body.mins
+    hrs:req.body.hours ? req.body.hours : 0,
+    mins:req.body.mins ? req.body.mins : 0,
   });
 
   if (req.body.list === "Today") {
