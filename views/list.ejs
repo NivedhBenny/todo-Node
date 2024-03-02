@@ -1,4 +1,4 @@
-<%- include("header") -%>
+<%- include("partials/header") -%>
 
   <div class="box" id="heading">
     <h1> <%= listTitle %> </h1>
@@ -12,24 +12,34 @@
         <p class="itemName"><%=  newListItems[i].name  %></p><p class="timeName"><%= newListItems[i].hrs%> Hrs <%=newListItems[i].mins %> Mins  </p>
       </div>
       <input type="hidden" name="listName" value="<%= listTitle%>" >
+      <input type="hidden" name="userEmail" value="<%= userEmailId %>" >
     </form>
       <% } %>
 
-      <form class="item" action="/" method="post">
+      <form class="item" action="/list" method="post">
         <input type="text" name="newItem" placeholder="New Item" autocomplete="off"><br>
         <div class="timeSlots">
           <input type="text" name="hours" placeholder="Hrs" autocomplete="off">
           <input type="text" name="mins" placeholder="Mins" autocomplete="off">
+          <input type="hidden" name="userEmail" value="<%= userEmailId %>" >
         </div>
         <button type="submit" name="list" value="<%= listTitle %>">+</button>
       </form>
       <div  class="show">
         <% if((totalHrs+totalMins)===0){ %>
-          <p>All Set! 🎊</p>
+          <p>All Set! 👍</p>
         <% }else{ %>
           <p><%= totalHrs %> Hrs <%= totalMins %> Mins</p>
         <% } %>
+        
       </div>
+      
   </div>
+  <div class="logout" style="display: flex; justify-content: center;">
+    <!-- <button type="submit" class="btn btn-dark" style="width: fit-content;"><a href="/logout" role="button">Log Out</a></button> -->
+    
+    <!-- <a href="/logout" class="btn btn-dark" style="width: fit-content;">Log Out</a> -->
+    <a href="/logout" class="btn">Log Out</a>
 
-<%- include("footer") -%>
+</div>
+<%- include("partials/footer") -%>
