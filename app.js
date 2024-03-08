@@ -146,46 +146,55 @@ app.post("/list", async function (req, res) {
 app.post("/register", async (req, res) => {
   const emailId = req.body.email;
   const password = req.body.password;
-  // check if email already registered
-  const result = await User.findOne({email:emailId});
-  if (result) {
-    console.log("Email already exists. Try logging in.");
-    res.redirect("/login");
-  } else {
-    bcrypt.hash(password,saltRounds,async (err,hashPassword)=>{
-      if(err){
-        console.log("error while hashing",err)
-      }else{
-        const user = new User({
-          email: emailId,
-          password: hashPassword,
-        });
-        user.save();
-        res.redirect(`/list?email=${emailId}`);
-      }
-    });
-  }
+  if(!(emailId&&password)){
+      console.log("enter email and password");
+      res.redirect("/register");
+  }else{
+    const result = await User.findOne({email:emailId});
+    if (result) {
+      console.log("Email already exists. Try logging in.");
+      res.redirect("/login");
+    } else {
+      bcrypt.hash(password,saltRounds,async (err,hashPassword)=>{
+        if(err){
+          console.log("error while hashing",err)
+        }else{
+          const user = new User({
+            email: emailId,
+            password: hashPassword,
+          });
+          user.save();
+          res.redirect(`/list?email=${emailId}`);
+        }
+      });
+    }
+  }  
 });
 app.post("/login", async (req, res) => {
   const loginEmailId = req.body.email;
   const loginPassword = req.body.password;
-  const result = await User.findOne({ email: loginEmailId });
-  if (result) {
-    bcrypt.compare(loginPassword,result.password,(err,result)=>{
-      if(err){
-        console.log("error occured",err);
-      }else{
-        if(result===true){
-          res.redirect(`/list?email=${loginEmailId}`);
+  if(!(loginEmailId&&loginPassword)){
+    console.log("enter email and password");
+    res.redirect("/login");
+  }else{
+    const result = await User.findOne({ email: loginEmailId });
+    if (result) {
+      bcrypt.compare(loginPassword,result.password,(err,result)=>{
+        if(err){
+          console.log("error occured",err);
         }else{
-          console.log("incorrect password");
-          res.redirect("/login");
+          if(result===true){
+            res.redirect(`/list?email=${loginEmailId}`);
+          }else{
+            console.log("incorrect password");
+            res.redirect("/login");
+          }
         }
-      }
-    });
-  } else {
-    console.log("User doesnt exist");
-    res.redirect("/register");
+      });
+    } else {
+      console.log("User doesnt exist");
+      res.redirect("/register");
+    }
   }
 });
 

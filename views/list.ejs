@@ -26,7 +26,7 @@
         <button type="submit" name="list" value="<%= listTitle %>">+</button>
       </form>
       <div  class="show">
-        <% if((totalHrs+totalMins)===0){ %>
+        <% if((totalHrs+totalMins+newListItems.length)===0){ %>
           <p>All Set! 👍</p>
         <% }else{ %>
           <p><%= totalHrs %> Hrs <%= totalMins %> Mins</p>
