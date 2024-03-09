@@ -11,6 +11,7 @@ html {
 h1 {
   color: #ffff;
   padding: 20px;
+  
 }
 
 p {
@@ -47,6 +48,7 @@ p {
 .homecontainer h1 {
   color: #114232;
   justify-content: center;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }
 #heading {
   background-color: #638889;
@@ -86,7 +88,7 @@ p {
 
 input:checked + p {
   text-decoration: line-through;
-  text-decoration-color: #a683e3;
+  text-decoration-color: #40c491;
 }
 
 input[type="checkbox"] {
@@ -134,7 +136,7 @@ input[type="text"] {
 
 input[type="text"]:focus {
   outline: none;
-  box-shadow: inset 0 -3px 0 0 #a683e3;
+  box-shadow: inset 0 -3px 0 0 #78d470;
 }
 
 ::placeholder {
